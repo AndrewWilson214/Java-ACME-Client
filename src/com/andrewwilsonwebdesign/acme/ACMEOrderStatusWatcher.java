@@ -7,20 +7,24 @@ public class ACMEOrderStatusWatcher {
 
     private Timer timer;
 
+    @SuppressWarnings("unused")
     public ACMEOrderStatusWatcher(ACMEOrder order, ACMEOrderStatusWatcherListener listener){
         start(order, listener, 5000);
     }
 
+    @SuppressWarnings("unused")
     public ACMEOrderStatusWatcher(ACMEOrder order, ACMEOrderStatusWatcherListener listener, int pollingInterval){
         start(order, listener, pollingInterval);
     }
 
+    @SuppressWarnings("unused")
     private void start(ACMEOrder order, ACMEOrderStatusWatcherListener listener, int pollingInterval){
         TimerTask poller = new ACMEPollOrderEndpoint(order, listener, this);
         timer = new Timer(true);
         timer.scheduleAtFixedRate(poller, 0, pollingInterval);
     }
 
+    @SuppressWarnings("unused")
     public void destroy(){
         timer.cancel();
     }
@@ -30,8 +34,8 @@ public class ACMEOrderStatusWatcher {
 class ACMEPollOrderEndpoint extends TimerTask {
 
     private ACMEOrder order;
-    private ACMEOrderStatusWatcherListener listener;
-    private ACMEOrderStatusWatcher watcher;
+    private final ACMEOrderStatusWatcherListener listener;
+    private final ACMEOrderStatusWatcher watcher;
 
     public ACMEPollOrderEndpoint(ACMEOrder order, ACMEOrderStatusWatcherListener listener, ACMEOrderStatusWatcher watcher){
         this.order = order;
@@ -65,7 +69,8 @@ class ACMEPollOrderEndpoint extends TimerTask {
             }
             this.order = updatedOrder;
         }catch(Exception e){
-            System.out.println(e);
+            System.out.println("Watcher failed to fetch order updates.");
+            System.out.println(e.getMessage());
         }
     }
 }

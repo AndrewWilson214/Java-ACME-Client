@@ -21,6 +21,7 @@ public class ACMEChallenge {
 
     public ACMEAuthorization authorization;
 
+    @SuppressWarnings("unused")
     public void complete() throws Exception {
 
         HashMap<String, Object> payload = new HashMap<>();
@@ -29,13 +30,13 @@ public class ACMEChallenge {
 
     }
 
+    @SuppressWarnings("unused")
     public String getKeyAuthorizationString() throws NoSuchAlgorithmException {
         Gson gson = new Gson();
 
         JWK jwk = authorization.order.account.acmeClient.jws.getJWK(authorization.order.account.keyPair.getPublic());
         Map<String, Object> jwkMap = jwk.toJSONObject();
-        TreeMap<String, Object> treeMap = new TreeMap<String, Object>();
-        treeMap.putAll(jwkMap);
+        TreeMap<String, Object> treeMap = new TreeMap<>(jwkMap);
 
         String jwkJson = gson.toJson(treeMap);
 

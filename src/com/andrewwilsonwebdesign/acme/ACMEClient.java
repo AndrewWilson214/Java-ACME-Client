@@ -12,11 +12,13 @@ public class ACMEClient {
     public ACMEJWSHelper jws;
     public ACMEDirectory directory;
 
+    @SuppressWarnings("unused")
     public ACMEClient(String directoryURL) throws MalformedURLException {
         jws = new ACMEJWSHelper(this);
         directory = new ACMEDirectory(directoryURL);
     }
 
+    @SuppressWarnings("unused")
     public ACMEAccount login(KeyPair keyPair) throws Exception {
 
         HashMap<String, Object> payload = new HashMap<>();
@@ -25,6 +27,7 @@ public class ACMEClient {
 
     }
 
+    @SuppressWarnings("unused")
     public ACMEAccount login(KeyPair keyPair, Boolean createIfAccountDoesNotExist) throws Exception {
 
         HashMap<String, Object> payload = new HashMap<>();
@@ -34,6 +37,7 @@ public class ACMEClient {
 
     }
 
+    @SuppressWarnings("unused")
     public ACMEAccount login(KeyPair keyPair, String[] contactMethods, Boolean tosAgreement) throws Exception{
         HashMap<String, Object> payload = new HashMap<>();
         payload.put("contact", contactMethods);
@@ -42,6 +46,7 @@ public class ACMEClient {
         return newAccount(keyPair, payload);
     }
 
+    @SuppressWarnings("unused")
     private ACMEAccount newAccount(KeyPair keyPair, HashMap<String, Object> payload) throws Exception {
 
         ACMEHTTPResponse response = jws.execute(directory.fetch().newAccount, keyPair, payload);

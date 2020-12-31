@@ -9,8 +9,6 @@ import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.RSAKey;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,7 +20,7 @@ class ACMEJWSHelper {
 
     private String nextNonce;
     public ACMEClient acmeClient;
-    private ExceptionAdapter exceptionAdapter;
+    private final ExceptionAdapter exceptionAdapter;
 
     public ACMEJWSHelper(ACMEClient acmeClient) {
         exceptionAdapter = new ExceptionAdapter();
@@ -37,7 +35,7 @@ class ACMEJWSHelper {
                 .jwk(getJWK(keyPair.getPublic()))
                 .build();
 
-        return runRequest(url, buildBody(url, keyPair.getPrivate(), header, payload));
+        return runRequest(url, buildBody(keyPair.getPrivate(), header, payload));
     }
 
     public ACMEHTTPResponse execute(String url, ACMEAccount account, HashMap<String, Object> payload) throws Exception {
@@ -48,10 +46,10 @@ class ACMEJWSHelper {
                 .keyID(account.url)
                 .build();
 
-        return runRequest(url, buildBody(url, account.keyPair.getPrivate(), header, payload));
+        return runRequest(url, buildBody(account.keyPair.getPrivate(), header, payload));
     }
 
-    private String buildBody(String url, PrivateKey privateKey, JWSHeader header, HashMap<String, Object> payload) throws Exception {
+    private String buildBody(PrivateKey privateKey, JWSHeader header, HashMap<String, Object> payload) throws Exception {
 
         Payload thePayload;
         if(payload == null){
@@ -101,15 +99,15 @@ class ACMEJWSHelper {
             }
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(streamToRead));
-            String responseBody = "";
+            StringBuilder responseBody = new StringBuilder();
             String input;
             while((input = reader.readLine()) != null){
-                responseBody += input;
+                responseBody.append(input);
             }
             reader.close();
 
             ACMEHTTPHeaders headers = new ACMEHTTPHeaders(urlConnection.getHeaderFields());
-            ACMEHTTPResponse response = new ACMEHTTPResponse(headers, responseBody);
+            ACMEHTTPResponse response = new ACMEHTTPResponse(headers, responseBody.toString());
 
             urlConnection.disconnect();
 
@@ -140,10 +138,8 @@ class ACMEJWSHelper {
 
     public JWK getJWK(PublicKey publicKey) {
 
-        JWK jwk = new RSAKey.Builder((RSAPublicKey) publicKey)
+        return new RSAKey.Builder((RSAPublicKey) publicKey)
                 .build();
-
-        return jwk;
 
     }
 

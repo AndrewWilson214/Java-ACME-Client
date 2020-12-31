@@ -21,12 +21,14 @@ public class ACMEAuthorization {
     public ACMEOrder order;
     public Boolean partial;
 
+    @SuppressWarnings("unused")
     public ACMEAuthorization(String url, ACMEOrder order){
         partial = true;
         this.url = url;
         this.order = order;
     }
 
+    @SuppressWarnings("unused")
     public ACMEAuthorization fetch() throws Exception {
         partial = false;
 
@@ -43,10 +45,10 @@ public class ACMEAuthorization {
         return newAuthorization;
     }
 
+    @SuppressWarnings("unused")
     public ACMEChallenge getChallenge(String type){
-        for(int i = 0; i < challenges.length; i++){
-            ACMEChallenge challenge = challenges[i];
-            if(challenge.type.equals(type)){
+        for (ACMEChallenge challenge : challenges) {
+            if (challenge.type.equals(type)) {
                 return challenge;
             }
         }

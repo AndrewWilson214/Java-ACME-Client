@@ -4,8 +4,8 @@ import java.util.*;
 
 public class ACMEHTTPResponse {
 
-    private ACMEHTTPHeaders headerFields;
-    private String body;
+    private final ACMEHTTPHeaders headerFields;
+    private final String body;
 
     public ACMEHTTPResponse(ACMEHTTPHeaders headerFields, String body){
         this.headerFields = headerFields;
@@ -26,11 +26,13 @@ class ACMEHTTPHeaders{
 
     HashMap<String, List<String>> headers;
 
+    @SuppressWarnings("unused")
     public ACMEHTTPHeaders(Map<String, List<String>> map){
         headers = new HashMap<>();
         headers.putAll(map);
     }
 
+    @SuppressWarnings("unused")
     public String firstValue(String key){
         List<String> value = headers.get(key);
         if(value != null){

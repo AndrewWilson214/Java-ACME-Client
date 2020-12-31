@@ -34,15 +34,18 @@ public class ACMEOrder {
     public ACMEAccount account;
     public String url;
 
+    @SuppressWarnings("unused")
     public ACMEOrder(){
 
     }
 
+    @SuppressWarnings("unused")
     public ACMEOrder(String url, ACMEAccount account){
         this.url = url;
         this.account = account;
     }
 
+    @SuppressWarnings("unused")
     public ACMEAuthorization[] fetchAllAuthorizations() throws Exception {
         ACMEAuthorization[] auths = new ACMEAuthorization[authorizations.length];
         for(int i = 0; i < authorizations.length; i++){
@@ -52,6 +55,7 @@ public class ACMEOrder {
         return auths;
     }
 
+    @SuppressWarnings("unused")
     public ACMEOrder fetch() throws Exception {
 
         ACMEHTTPResponse response = account.acmeClient.jws.execute(url, this.account, null);
@@ -64,6 +68,7 @@ public class ACMEOrder {
         return newOrder;
     }
 
+    @SuppressWarnings("unused")
     public ACMEOrder finalizeOrder(String csrText) throws Exception {
        HashMap<String, Object> payload = new HashMap<>();
        payload.put("csr", csrText);
@@ -78,6 +83,7 @@ public class ACMEOrder {
        return newOrder;
     }
 
+    @SuppressWarnings("unused")
     public X509Certificate[] getCertificates() throws Exception {
 
         ACMEHTTPResponse response = account.acmeClient.jws.execute(this.certificate, this.account, null);
@@ -106,7 +112,9 @@ public class ACMEOrder {
 
         }
 
-        return certificates.toArray(new X509Certificate[certificates.size()]);
+        X509Certificate[] certs = new X509Certificate[certificates.size()];
+        certs = certificates.toArray(certs);
+        return certs;
 
     }
 

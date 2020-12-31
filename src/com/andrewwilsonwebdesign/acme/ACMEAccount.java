@@ -17,25 +17,27 @@ public class ACMEAccount {
     @Expose public String initialIp;
     @Expose public String createdAt;
     @Expose public String status;
-    @Expose private String orders;
+    @Expose public String orders;
 
     /* INJECTED */
     public KeyPair keyPair;
     public String url;
     public ACMEClient acmeClient;
 
+    @SuppressWarnings("unused")
     public ACMEAccount(KeyPair keyPair, String url, ACMEClient acmeClient){
         this.keyPair = keyPair;
         this.url = url;
         this.acmeClient = acmeClient;
     }
 
+    @SuppressWarnings("unused")
     public ACMEOrder newOrder(String[] domains) throws Exception {
-        List<Map<String, String>> identifiers = new ArrayList<Map<String, String>>();
-        for(int i = 0; i < domains.length; i++){
+        List<Map<String, String>> identifiers = new ArrayList<>();
+        for (String domain : domains) {
             Map<String, String> identifier = new HashMap<>();
             identifier.put("type", "dns");
-            identifier.put("value", domains[i]);
+            identifier.put("value", domain);
             identifiers.add(identifier);
         }
 
@@ -53,6 +55,7 @@ public class ACMEAccount {
 
     }
 
+    @SuppressWarnings("unused")
     public ACMEAccount updateContactDetails(String[] contactDetails) throws Exception{
 
         HashMap<String, Object> payload = new HashMap<>();
@@ -70,6 +73,7 @@ public class ACMEAccount {
 
     }
 
+    @SuppressWarnings("unused")
     public void deactivate() throws Exception {
 
         HashMap<String, Object> payload = new HashMap<>();
@@ -79,6 +83,7 @@ public class ACMEAccount {
 
     }
 
+    @SuppressWarnings("unused")
     public ACMEAccount fetch() throws Exception {
 
         ACMEHTTPResponse response = acmeClient.jws.execute(url, this, null);
